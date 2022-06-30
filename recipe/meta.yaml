@@ -10,7 +10,7 @@ source:
   sha256: 6ac0e7a8bbe02859d46c53c03d3f33136bbf49c8c7d9a6d818409e17a604eda0
 
 build:
-  noarch: python
+  # noarch: python
   number: 0
   entry_points:
     - pipenv=pipenv:cli
