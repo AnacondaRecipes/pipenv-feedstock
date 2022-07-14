@@ -1,5 +1,6 @@
 {% set name = "pipenv" %}
-{% set version = "2022.6.7" %}
+{% set version = "2022.7.4" %}
+{% set sha256 = "18420fbae2851d2b9d70d1e00f77a8c55d09704a177fe872a0a2da56e98eb018" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +8,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 6ac0e7a8bbe02859d46c53c03d3f33136bbf49c8c7d9a6d818409e17a604eda0
+  sha256: {{ sha256 }}
 
 build:
   # noarch: python
@@ -50,7 +51,12 @@ about:
   license_family: MIT
   license_file: LICENSE
   summary: Python Development Workflow for Humans.
+  description: |
+    Pipenv is a tool that aims to bring the best of all packaging worlds (bundler, composer,
+    npm, cargo, yarn, etc.) to the Python world.
   doc_url: https://pipenv-fork.readthedocs.io/en/latest/
+  doc_source_url: https://github.com/pypa/pipenv/tree/main/docs
+  dev_url: https://github.com/pypa/pipenv
 
 extra:
   recipe-maintainers:
