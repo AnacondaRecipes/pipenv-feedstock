@@ -20,11 +20,13 @@ build:
 
 requirements:
   host:
-    - pip >=18.0
-    - python 
+    - pip >=22.0.4
+    - python
+    - setuptools
+    - wheel
   run:
     - certifi
-    - pip >=18.0
+    - pip >=22.0.4
     - python
     - setuptools >=36.2.1
     - virtualenv
