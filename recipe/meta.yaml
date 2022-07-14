@@ -42,8 +42,10 @@ test:
     # Related:
     # https://github.com/pypa/pipenv/pull/4944
     # https://github.com/pypa/pipenv/issues/4909
-    - CI=1 python -c "import pipenv"
-    - CI=1 pipenv --help
+    - export CI=1  # [not win]
+    - set CI=1     # [win]
+    - python -c "import pipenv"
+    - pipenv --help
 
 about:
   home: https://github.com/pypa/pipenv
