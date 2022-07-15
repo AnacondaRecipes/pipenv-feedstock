@@ -23,8 +23,8 @@ requirements:
   host:
     - pip
     - python
-    - setuptools
     - wheel
+    - setuptools
   run:
     - certifi
     - pip >=22.0.4
