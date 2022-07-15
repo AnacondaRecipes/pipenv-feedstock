@@ -17,6 +17,7 @@ build:
     - pipenv=pipenv:cli
     - pipenv-resolver=pipenv.resolver:main
   script: {{ PYTHON }} -m pip install . -vv
+  skip: true  # [py<37]
 
 requirements:
   host:
@@ -26,7 +27,7 @@ requirements:
     - wheel
   run:
     - certifi
-    - pip >=22.0.4
+    - pip
     - python
     - setuptools >=36.2.1
     - virtualenv
@@ -48,6 +49,7 @@ test:
     - set CI=1     # [win]
     - python -c "import pipenv"
     - pipenv --help
+    - pip check
 
 about:
   home: https://github.com/pypa/pipenv
