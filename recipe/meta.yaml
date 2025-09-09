@@ -1,13 +1,13 @@
 {% set name = "pipenv" %}
-{% set version = "2022.7.4" %}
-{% set sha256 = "18420fbae2851d2b9d70d1e00f77a8c55d09704a177fe872a0a2da56e98eb018" %}
+{% set version = "2025.0.4" %}
+{% set sha256 = "36fc2a7841ccdb2f58a9f787b296c2e15dea3b5b79b84d4071812f28b7e8d7a2" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
@@ -17,21 +17,23 @@ build:
     - pipenv=pipenv:cli
     - pipenv-resolver=pipenv.resolver:main
   script: {{ PYTHON }} -m pip install . -vv
-  skip: true  # [py<37]
+  skip: true  # [py<39]
 
 requirements:
   host:
     - pip
     - python
-    - wheel
-    - setuptools
+    - setuptools >=67
   run:
     - certifi
     - pip >=22.0.4
     - python
-    - setuptools >=36.2.1
-    - virtualenv
+    - setuptools >=67
+    - virtualenv >=20.24.2
     - virtualenv-clone >=0.2.5
+    - packaging >=22
+  run_constrained:
+    - safety >=3.0.0
 
 test:
   commands:
@@ -46,7 +48,7 @@ test:
     # https://github.com/pypa/pipenv/pull/4944
     # https://github.com/pypa/pipenv/issues/4909
     - export CI=1  # [not win]
-    - set CI=1     # [win]
+    - set CI=1  # [win]
     - python -c "import pipenv"
     - pipenv --help
     - pip check
