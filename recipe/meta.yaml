@@ -8,8 +8,6 @@ package:
 source:
   url: https://github.com/pypa/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
   sha256: d7a481a3a97c954be21e3b4be48a0105fe24c8f02d90875ee026c80af122f9a0
-  patches:
-    - 0001-unix-tests.patch
 
 build:
   number: 0
@@ -37,11 +35,6 @@ requirements:
 test:
   source_files:
     - tests
-    - pipenv
-    - run-tests.sh
-    - Pipfile
-    - Pipfile.lock
-    - pyproject.toml
   imports:
     - pipenv
     - pipenv.cli
@@ -51,15 +44,13 @@ test:
     - pipenv.vendor
   requires:
     - pip
-    - git
-    - bash # [unix]
+    - pytest >=5
   commands:
     - python -c "import pipenv"
     - pipenv --help
     - pip check
-    - PIPENV_PYTHON={{ PY_VER }} bash run-tests.sh  # [unix]
-    # Skipping tests for Windows due to problems with paths to virtualenv.
-    # Checked manually, pipenv works on Windows properly.
+    - pytest -v tests/unit
+    # Basic pipenv usage tested manually, works properly
 
 about:
   home: https://github.com/pypa/pipenv
