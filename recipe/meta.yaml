@@ -45,6 +45,7 @@ test:
   requires:
     - pip
     - pytest >=5
+    - pytz
   commands:
     - python -c "import pipenv"
     - pipenv --help
