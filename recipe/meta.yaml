@@ -1,55 +1,57 @@
 {% set name = "pipenv" %}
-{% set version = "2022.7.4" %}
-{% set sha256 = "18420fbae2851d2b9d70d1e00f77a8c55d09704a177fe872a0a2da56e98eb018" %}
+{% set version = "2025.0.4" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://github.com/pypa/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: d7a481a3a97c954be21e3b4be48a0105fe24c8f02d90875ee026c80af122f9a0
 
 build:
-  # noarch: python
   number: 0
   entry_points:
     - pipenv=pipenv:cli
     - pipenv-resolver=pipenv.resolver:main
-  script: {{ PYTHON }} -m pip install . -vv
-  skip: true  # [py<37]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<39]
 
 requirements:
   host:
     - pip
     - python
-    - wheel
-    - setuptools
+    - setuptools >=67
   run:
-    - certifi
-    - pip >=22.0.4
     - python
-    - setuptools >=36.2.1
-    - virtualenv
-    - virtualenv-clone >=0.2.5
+    - certifi
+    - packaging >=22
+    # setuptools is a part of run dependency https://github.com/pypa/pipenv/blob/v2025.0.4/pyproject.toml#L31
+    - setuptools >=67
+    - virtualenv >=20.24.2
+  run_constrained:
+    - safety >=3.0.0
 
 test:
+  source_files:
+    - tests
+  imports:
+    - pipenv
+    - pipenv.cli
+    - pipenv.patched
+    - pipenv.routines
+    - pipenv.utils
+    - pipenv.vendor
+  requires:
+    - pip
+    - pytest >=5
+    - pytz
   commands:
-    # pipenv attempts to detect a CI environment via
-    #   PIPENV_IS_CI = env_to_bool(os.environ.get("CI") or os.environ.get("TF_BUILD") or False)
-    #   https://github.com/pypa/pipenv/blob/114eb8f80a63e519fe9d12ac9e7cb60444cf47c0/pipenv/environments.py#L101
-    #
-    # This expects the envvar "CI" to be truthy, however CI=azure in
-    # pipenv-feedstock.  Use CI=1 as workaround
-    #
-    # Related:
-    # https://github.com/pypa/pipenv/pull/4944
-    # https://github.com/pypa/pipenv/issues/4909
-    - export CI=1  # [not win]
-    - set CI=1     # [win]
     - python -c "import pipenv"
     - pipenv --help
     - pip check
+    - pytest -v tests/unit
+    # Basic pipenv usage tested manually, works properly
 
 about:
   home: https://github.com/pypa/pipenv
@@ -60,8 +62,7 @@ about:
   description: |
     Pipenv is a tool that aims to bring the best of all packaging worlds (bundler, composer,
     npm, cargo, yarn, etc.) to the Python world.
-  doc_url: https://pipenv-fork.readthedocs.io/en/latest/
-  doc_source_url: https://github.com/pypa/pipenv/tree/main/docs
+  doc_url: https://pipenv.pypa.io
   dev_url: https://github.com/pypa/pipenv
 
 extra:
