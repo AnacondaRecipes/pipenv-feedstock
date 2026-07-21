@@ -1,5 +1,5 @@
 {% set name = "pipenv" %}
-{% set version = "2025.0.4" %}
+{% set version = "2026.6.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/pypa/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: d7a481a3a97c954be21e3b4be48a0105fe24c8f02d90875ee026c80af122f9a0
+  sha256: 23991bed64882e39a21cdfb8085ee2c6188d7649556446904c64cffb2ee8d411
 
 build:
   number: 0
@@ -15,13 +15,15 @@ build:
     - pipenv=pipenv:cli
     - pipenv-resolver=pipenv.resolver:main
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: true  # [py<39]
+  skip: true  # [py==30,==31,==32,==33]
 
 requirements:
   host:
     - pip
     - python
     - setuptools >=67
+    - vcs_versioning
+    - setuptools-scm >=3.3.1
   run:
     - python
     - certifi
@@ -29,8 +31,11 @@ requirements:
     # setuptools is a part of run dependency https://github.com/pypa/pipenv/blob/v2025.0.4/pyproject.toml#L31
     - setuptools >=67
     - virtualenv >=20.24.2
+    - attrs
+    - vistir
   run_constrained:
     - safety >=3.0.0
+    - argcomplete >=3.1
 
 test:
   source_files:
