@@ -27,7 +27,7 @@ requirements:
     - certifi
     - packaging >=22
     # setuptools is a part of run dependency https://github.com/pypa/pipenv/blob/v2026.7.1/pyproject.toml#L31
-    - setuptools >=67
+    - setuptools >=67 # analint: python_build_tools_in_host
     - virtualenv >=20.26.6
   run_constrained:
     - safety >=3.0.0
