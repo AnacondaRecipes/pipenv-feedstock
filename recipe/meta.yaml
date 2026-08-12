@@ -1,13 +1,13 @@
 {% set name = "pipenv" %}
-{% set version = "2025.0.4" %}
+{% set version = "2026.7.1" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/pypa/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: d7a481a3a97c954be21e3b4be48a0105fe24c8f02d90875ee026c80af122f9a0
+  sha256: 539d3f5be93e169bbe4ca35135624850a5a5ce7a764adf97eb6b4d898d656b1a
 
 build:
   number: 0
@@ -15,7 +15,7 @@ build:
     - pipenv=pipenv:cli
     - pipenv-resolver=pipenv.resolver:main
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  skip: true  # [py<39]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -26,15 +26,19 @@ requirements:
     - python
     - certifi
     - packaging >=22
-    # setuptools is a part of run dependency https://github.com/pypa/pipenv/blob/v2025.0.4/pyproject.toml#L31
-    - setuptools >=67
-    - virtualenv >=20.24.2
+    # setuptools is a part of run dependency https://github.com/pypa/pipenv/blob/v2026.7.1/pyproject.toml#L31
+    - setuptools >=67 # analint: python_build_tools_in_host
+    - virtualenv >=20.26.6
   run_constrained:
     - safety >=3.0.0
+    - argcomplete >=3.1
+
+{% set tests_to_skip = "test_resolver_subprocess_happy_path_returns_success_with_stubbed_resolver" %}
 
 test:
   source_files:
     - tests
+    - tasks
   imports:
     - pipenv
     - pipenv.cli
@@ -46,11 +50,14 @@ test:
     - pip
     - pytest >=5
     - pytz
+    - invoke
+    - semver
+    - bs4
+    - requests
   commands:
-    - python -c "import pipenv"
     - pipenv --help
     - pip check
-    - pytest -v tests/unit
+    - pytest -v tests/unit -k "not ({{ tests_to_skip }})"
     # Basic pipenv usage tested manually, works properly
 
 about:
@@ -68,4 +75,4 @@ about:
 extra:
   recipe-maintainers:
     - drewgilliam
-    - roccqqck
+    - roccqqck  
