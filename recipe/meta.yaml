@@ -33,7 +33,9 @@ requirements:
     - safety >=3.0.0
     - argcomplete >=3.1
 
-{% set tests_to_skip = "test_resolver_subprocess_happy_path_returns_success_with_stubbed_resolver" %}
+# Rewrites a cache file with identical size and (on coarse-timestamp filesystems) identical
+# mtime/ctime, so the in-memory manifest cache is not invalidated. Upstream test race.
+{% set tests_to_skip = "test_expires_at_wrong_type_treated_as_miss" %}
 
 test:
   source_files:
