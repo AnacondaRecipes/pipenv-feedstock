@@ -1,5 +1,5 @@
 {% set name = "pipenv" %}
-{% set version = "2026.7.1" %}
+{% set version = "2026.10.2" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/pypa/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 539d3f5be93e169bbe4ca35135624850a5a5ce7a764adf97eb6b4d898d656b1a
+  sha256: bdb8f34daf3a9432937dc1173a4e7c0cf57569c73886ee2992596190015f6819
 
 build:
   number: 0
@@ -26,14 +26,16 @@ requirements:
     - python
     - certifi
     - packaging >=22
-    # setuptools is a part of run dependency https://github.com/pypa/pipenv/blob/v2026.7.1/pyproject.toml#L31
+    # setuptools is a part of run dependency
     - setuptools >=67 # analint: python_build_tools_in_host
-    - virtualenv >=20.26.6
+    - virtualenv >=21.14.6
   run_constrained:
     - safety >=3.0.0
     - argcomplete >=3.1
 
-{% set tests_to_skip = "test_resolver_subprocess_happy_path_returns_success_with_stubbed_resolver" %}
+# Rewrites a cache file with identical size and (on coarse-timestamp filesystems) identical
+# mtime/ctime, so the in-memory manifest cache is not invalidated. Upstream test race.
+{% set tests_to_skip = "test_expires_at_wrong_type_treated_as_miss" %}
 
 test:
   source_files:
@@ -75,4 +77,4 @@ about:
 extra:
   recipe-maintainers:
     - drewgilliam
-    - roccqqck  
+    - roccqqck
